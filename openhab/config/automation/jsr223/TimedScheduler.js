@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2018 by Helmut Lehmeyer.
- * 
- * @author Helmut Lehmeyer 
- */
-
 'use strict';
 
 load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/jsr223/jslib/JSRule.js');
@@ -12,7 +6,7 @@ var me = "TimedScheduler.js";
 var LOG_ME = "TimedScheduler.js - ";
 
 var DESCRIPTION = [
-    "Test_Storage1"
+    "<StorageItemName(Type=String)>"
 ];
 
 var DAY_KEYS = [ 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
