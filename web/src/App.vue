@@ -20,13 +20,13 @@
 
 <script lang="ts">
 
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
-import Notifications from 'vue-notification'
+import Notifications from 'vue-notification';
 import axios from 'axios';
 
-import TimelineSettings from "./components/TimelineSettings.vue";
-import Timeline from "./components/Timeline.vue";
+import TimelineSettings from './components/TimelineSettings.vue';
+import Timeline from './components/Timeline.vue';
 import { AppStore } from './store/index';
 
 Vue.use(Notifications)
@@ -60,15 +60,16 @@ export default class App extends Vue {
         //
         var params = new URLSearchParams(window.location.search);
 
-        var tmp = params.get('storageItemName');
+        //
+        var tmp : string | null = params.get('storageItemName');
         if(tmp == null)
             throw "storageItemName not set!";
+        this.storageItemName = tmp;
 
+        //
         tmp = params.get('displaySettings');
         if(tmp != null)
-            this.displaySettings = tmp === 'true' ? true : false
-
-        this.storageItemName = tmp;
+            this.displaySettings = tmp === 'true' ? true : false;
 
         this._loadStore();
     }
@@ -135,15 +136,12 @@ export default class App extends Vue {
     async _saveToOpenHabItem(json: Object) {
         var requestUrl = this.openHabRestEndpoint + '/' + this.storageItemName;
         axios
-            .post(
-                requestUrl,
-                JSON.stringify(json),
-                { 
-                    headers: {
-                        "Accept": "application/json",
-                        "content-type": "text/plain"
-                    }
-                })
+            .post(requestUrl, JSON.stringify(json), {
+                headers: {
+                    "Accept": "application/json",
+                    "content-type": "text/plain"
+                }
+            })
             .then(response => {
                 //#TODO view error in gui
             });
