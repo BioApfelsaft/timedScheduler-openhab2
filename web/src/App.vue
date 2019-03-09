@@ -2,10 +2,6 @@
     <div id="app">
         <notifications group="toasts" />
 
-        <img alt="Vue logo" src="./assets/logo.png">
-
-        <hr/>
-
         <div class="header">
             <button type="button" v-on:click="_loadStore()">Load</button>
             <button type="button" v-on:click="_saveStore()">Save</button>
@@ -16,11 +12,7 @@
             </button>
         </div>
 
-        <hr/>
-
         <TimelineSettings v-if="displaySettings"/>
-
-        <hr/>
 
         <Timeline/>
     </div>
@@ -71,6 +63,10 @@ export default class App extends Vue {
         var tmp = params.get('storageItemName');
         if(tmp == null)
             throw "storageItemName not set!";
+
+        tmp = params.get('displaySettings');
+        if(tmp != null)
+            this.displaySettings = tmp === 'true' ? true : false
 
         this.storageItemName = tmp;
 
