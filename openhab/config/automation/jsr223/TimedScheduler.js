@@ -1,3 +1,7 @@
+/**
+ * @author https://github.com/BioApfelsaft
+ */
+
 'use strict';
 
 load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/jsr223/jslib/JSRule.js');
@@ -5,25 +9,23 @@ load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/jsr223/js
 var me = "TimedScheduler.js";
 var LOG_ME = "TimedScheduler.js - ";
 
-var DESCRIPTION = [
-    "<StorageItemName(Type=String)>"
-];
-
 var DAY_KEYS = [ 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
 
 JSRule({
 	name: "TimedScheduler",
 	triggers: [ 
-		TimerTrigger("0/5 * * * * ?")
+		TimerTrigger("0/60 * * * * ?")
 	],
 	execute: function(module, input){
-		for(var i = 0; i < DESCRIPTION.length; i++) {
+        var timedSchedulerStorageGroup = getItem('gTimedSchedulerStorage');
+        var allStorageItems = timedSchedulerStorageGroup.getAllMembers().toArray();
+
+		for(var i = 0; i < allStorageItems.length; i++) {
+            var storageItem = allStorageItems[i];
+
             try {
-                var storageItemName = DESCRIPTION[i];
-                
                 //
-                var transferItem = getItem(storageItemName);    //#todo getItem -> catch 'org.eclipse.smarthome.core.items.ItemNotFoundException' ?
-                var jsonAsString = transferItem.state;
+                var jsonAsString = storageItem.state;
                 
                 //
                 var currentDate = new Date();
@@ -40,11 +42,17 @@ JSRule({
                 var availableValues = json['availableValues'];
                 var dayValues = json['dayValues'];
                 
-                if( itemNames == null || itemNames.length <= 0 ||
+                if( itemNames == null ||
                     availableValues == null || availableValues.length <= 0 ||
                     dayValues == null || dayValues.length <= 0)
                 {
                     throw 'Invalid json (' + JSON.stringify(json) + ')';
+                }
+
+                if(itemNames.length <= 0)
+                {
+                    logInfo('No itemNames found. Skip!');
+                    continue;
                 }
                 
                 //logInfo(JSON.stringify(itemNames));
