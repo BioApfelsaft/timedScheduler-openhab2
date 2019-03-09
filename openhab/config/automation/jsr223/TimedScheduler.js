@@ -14,7 +14,7 @@ var DAY_KEYS = [ 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
 JSRule({
 	name: "TimedScheduler",
 	triggers: [ 
-		TimerTrigger("0/60 * * * * ?")
+		TimerTrigger("0/30 * * * * ?")
 	],
 	execute: function(module, input){
         var timedSchedulerStorageGroup = getItem('gTimedSchedulerStorage');
