@@ -12,19 +12,27 @@
             </div>
         </div>
 
-        <div class="lines">
-            <div class="lable" v-for="(entry, i) in appStore.dayValues" :style="{ 'grid-row': i + 1 }">{{ _getLineInfoByDayKey(entry.dayKey).display }}</div>
-            <div class="line" v-for="(entry, i) in appStore.dayValues" :style="{ 'grid-row': i + 1 }">
-                <div class="sections">
+        <div class="wrapper">
+            <div class="lables">
+                <div class="time-row"></div>
+                <div class="value-row" v-for="(entry, i) in appStore.dayValues">
+                    {{ _getLineInfoByDayKey(entry.dayKey).display }}
+                </div>
+            </div>
+            <div class="values">
+                <div class="time-row flex-row">
+                    <div class="time-section" v-for="i in 24"> {{ i - 1 }} </div>
+                </div>
+                <div class="value-row flex-row" v-for="(entry, i) in appStore.dayValues">
                     <div
-                        class="section"
+                        class="value-section"
                         v-for="(availableValueIndex, i) in entry.valueIndices"
                         v-on:mousedown.left="_sectionMouseDown(entry.dayKey, i)"
                         v-on:mouseup.left="_sectionMouseUp(entry.dayKey, i)"
                         v-on:mousemove="_sectionMouseMove(entry.dayKey, i)"
                         :style="{ 'background-color': appStore.getAvailableValue_ColorByIndex(availableValueIndex) }"
                     >
-                        <div class="ruler-line" v-bind:class="{ 'low': i % 2 != 0, 'high': i % 2 == 0 }"></div>
+                        <div class="ruler-line" v-bind:class="{ 'low': i % 2 != 0, 'mid': i % 2 == 0, 'high': i % 4 == 0 }"></div>
                     </div>
                 </div>
             </div>
@@ -106,34 +114,44 @@ export default class Timeline extends Vue {
     background-color: lightgreen;
 }
 
-.lines {
-    display: grid;
-    grid-template-columns: min-content auto;
-    grid-template-rows: auto;
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
 }
-.lines .lable {
-    border: 1px inset black;
-    padding: 4px;
 
-    grid-column: 1;
+.lables { flex-grow: 0; }
+.values { flex-grow: 1; }
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
 }
-.lines .line {
-    border: 1px inset black;
+
+.time-row {
+    height: 30px;
+    line-height: 30px;
+}
+.time-section {
+    width: calc(100% / 24);
+    vertical-align: bottom;
+}
+
+.value-row {
     height: 50px;
-
-    grid-column: 2;
+    line-height: 50px;
 }
-
-.sections {
-    height: 100%;
-    display: grid;
-}
-.section {
+.value-section {
+    width: calc(100% / 96);
     height: 100%;
 
-    grid-row: 1;
-
-    background-color: #cccccc;
     position: relative;
 }
 
@@ -148,6 +166,9 @@ export default class Timeline extends Vue {
 }
 .ruler-line.low {
     height: 20%;
+}
+.ruler-line.mid {
+    height: 35%;
 }
 .ruler-line.high {
     height: 50%;
