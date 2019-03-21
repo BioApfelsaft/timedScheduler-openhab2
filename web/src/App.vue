@@ -53,7 +53,7 @@ export default class App extends Vue {
 
     mounted() {
         //
-        this.openHabRestEndpoint = 'http://' + window.location.host + '/rest/items';
+        this.openHabRestEndpoint = window.location.protocol + '//' + window.location.host + '/rest/items';
         this.getDataEndpoint = this.openHabRestEndpoint + '/' + this.storageItemName + '/state';
         this.postDataEndpoint = this.openHabRestEndpoint + '/' + this.storageItemName
 
