@@ -8,4 +8,7 @@ https://github.com/lewie/openhab2-javascript
 Openhab Sitemap example:
 Webview url="http://localhost:8080/static/timedScheduler?storageItemName=Test_Storage1" height=27 label="Webview Test"
 
+#todos
+
+* stylize
 

@@ -11,6 +11,9 @@ var LOG_ME = "TimedScheduler.js - ";
 
 var DAY_KEYS = [ 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
 
+var MODE_MANUALLY = 0;
+var MODE_AUTOMATICALLY = 0;
+
 JSRule({
 	name: "TimedScheduler",
 	triggers: [ 
@@ -38,15 +41,23 @@ JSRule({
                 var json = JSON.parse(jsonAsString);
                 
                 //
+                var mode = json['mode'];
                 var itemNames = json['itemNames'];
                 var availableValues = json['availableValues'];
                 var dayValues = json['dayValues'];
                 
-                if( itemNames == null ||
+                if( mode == null || isNaN(mode) ||
+                    itemNames == null || itemNames.length <= 0 ||
                     availableValues == null || availableValues.length <= 0 ||
                     dayValues == null || dayValues.length <= 0)
                 {
                     throw 'Invalid json (' + JSON.stringify(json) + ')';
+                }
+
+                if(mode == 0)
+                {
+                    logInfo('Scheduler mode(' + mode + ') == manually. Skip!');
+                    continue;
                 }
 
                 if(itemNames.length <= 0)

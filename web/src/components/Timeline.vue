@@ -1,5 +1,14 @@
 <template>
     <div class="timeline">
+        <div>
+            <div v-if="appStore.mode == 0">
+                <button type="button" v-on:click="_setMode(1)">manually</button>
+            </div>
+            <div v-if="appStore.mode == 1">
+                <button type="button" v-on:click="_setMode(0)">automatically</button>
+            </div>
+        </div>
+
         <div class="available-values">
             <div
                 class="entry"
@@ -62,6 +71,10 @@ export default class Timeline extends Vue {
     sectionsPerDay: number = Constants.SECTIONS_PER_DAY;
     selectedAvailableValueIndex: number = 0;
     isDragging : boolean = false;
+
+    _setMode(mode: Number) {
+        this.appStore.setMode(mode);
+    }
 
     _getLineInfoByDayKey(dayKey: string) : ILineInfo {
         return Constants.getLineInfoByDayKey(dayKey);

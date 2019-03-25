@@ -30,10 +30,19 @@ export interface Payload_EditItemName {
 @Module({ dynamic: true, store, name: 'AppStore' })
 export class AppStore extends VuexModule {
 
+    mode: Number = 0;
+
     availableValues: Types.IAvailableValue[] = [];
     itemNames: string[] = [];
 
     dayValues : Types.IDayValues[] = [];
+
+    //mode
+
+    @Mutation
+    public setMode(mode : Number) : void {
+        this.mode = mode;
+    }
 
     //availableValues
 
@@ -170,6 +179,7 @@ export class AppStore extends VuexModule {
         var json = await loadFunc();
 
         //
+        let mode : Number = typeof json.mode == 'number' ? json.mode : 0;
         let availableValues : Types.IAvailableValue[] = json.availableValues instanceof Array ? json.availableValues : [];
         let dayValues : Types.IDayValues[] = json.dayValues instanceof Array ? json.dayValues : [];
         let itemNames : string[] = json.itemNames instanceof Array ? json.itemNames : [];
@@ -198,6 +208,7 @@ export class AppStore extends VuexModule {
         }
 
         //
+        this.setMode(mode);
         this.setAvailableValue(availableValues);
         this.setDayValues(dayValues);
         this.setItemNames(itemNames);
